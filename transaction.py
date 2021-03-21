@@ -2,35 +2,29 @@ import psycopg2
 
 try:
     connection = psycopg2.connect(user="postgres",
-                                  password="pass@#29",
+                                  password="root",
                                   host="127.0.0.1",
-                                  port="5432",
-                                  database="postgres_db")
-    connection.autocommit = False
+                                  database="transactions")
+    connection.autocommit = True
     cursor = connection.cursor()
     amount = 2500
 
-    query = """select balance from account where id = 624001562408"""
+    query = "drop database if exists transactions"
     cursor.execute(query)
-    record = cursor.fetchone()[0]
-    balance_account_A = int(record)
-    balance_account_A -= amount
 
-    # Withdraw from account A  now
-    sql_update_query = """Update account set balance = %s where id = 624001562408"""
-    cursor.execute(sql_update_query, (balance_account_A,))
 
-    query = """select balance from account where id = 2236781258763"""
+    query = "create database transactions"
     cursor.execute(query)
-    record = cursor.fetchone()[0]
-    balance_account_B = int(record)
-    balance_account_B += amount
 
-    # Credit to  account B  now
-    sql_update_query = """Update account set balance = %s where id = 2236781258763"""
-    cursor.execute(sql_update_query, (balance_account_B,))
 
-    # commiting both the transction to database
+    query = """create table if not exists produtos(
+        product_name varchar(100),
+        brand_name varchar(100),
+        asin varchar(100)
+    )"""
+    
+    cursor.execute(query)
+    
     connection.commit()
     print("Transaction completed successfully ")
 
