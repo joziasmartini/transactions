@@ -4,32 +4,27 @@ try:
     connection = psycopg2.connect(user="postgres",
                                   password="root",
                                   host="127.0.0.1",
-                                  database="transactions")
-    connection.autocommit = True
+                                  database="postgres")
+    connection.autocommit = False
     cursor = connection.cursor()
-    amount = 2500
 
-    query = "drop database if exists transactions"
+    query = "drop table if exists Products"
     cursor.execute(query)
+    connection.commit()
 
-
-    query = "create database transactions"
-    cursor.execute(query)
-
-
-    query = """create table if not exists produtos(
+    query = """create table if not exists Products(
         product_name varchar(100),
         brand_name varchar(100),
         asin varchar(100)
     )"""
-    
     cursor.execute(query)
-    
     connection.commit()
+    
     print("Transaction completed successfully ")
 
 except (Exception, psycopg2.DatabaseError) as error:
-    print("Error in transction Reverting all other operations of a transction ", error)
+    print("Deu caca\n")
+    print(error)
     connection.rollback()
 
 finally:
