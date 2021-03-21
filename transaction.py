@@ -1,4 +1,5 @@
 import psycopg2
+import pandas as pd
 
 try:
     connection = psycopg2.connect(user="postgres",
@@ -19,8 +20,19 @@ try:
     )"""
     cursor.execute(query)
     connection.commit()
-    
-    print("Transaction completed successfully ")
+
+    print("Chegou aq")
+
+    #Começa inserção banco
+
+    df = pd.read_csv('data.csv')
+
+    for x in range(10002):
+        print(df['Product Name'] [x], end='')
+        print(' ')
+        print(df['Brand Name'] [x], end='')
+        print(' ')
+        print(df['Asin'] [x], end='')
 
 except (Exception, psycopg2.DatabaseError) as error:
     print("Deu caca\n")
