@@ -27,12 +27,16 @@ try:
 
     df = pd.read_csv('data.csv')
 
-    for x in range(10002):
-        print(df['Product Name'] [x], end='')
-        print(' ')
-        print(df['Brand Name'] [x], end='')
-        print(' ')
-        print(df['Asin'] [x], end='')
+    for x in range(100): # (10002):
+        productName = df['Product Name']
+        brandName = df['Brand Name']
+        asin = df['Asin']
+
+        cursor.execute("insert into Products values (productName, brandName, asin)")
+        connection.commit()
+
+    print("Terminooooou")
+
 
 except (Exception, psycopg2.DatabaseError) as error:
     print("Deu caca\n")
@@ -40,7 +44,7 @@ except (Exception, psycopg2.DatabaseError) as error:
     connection.rollback()
 
 finally:
-    # closing database connection.
+    # Fecha a conexão com o banco de dados
     if connection:
         cursor.close()
         connection.close()
