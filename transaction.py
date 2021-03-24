@@ -1,5 +1,6 @@
 import psycopg2
 import pandas as pd
+import time
 
 try:
     connection = psycopg2.connect(user="postgres",
@@ -26,16 +27,20 @@ try:
     #Começa inserção banco
 
     df = pd.read_csv('data.csv')
-
+    
+    start = time.time()
     for x in range(100): # (10002):
         productName = df['Product Name']
         brandName = df['Brand Name']
         asin = df['Asin']
 
         cursor.execute("insert into Products values (productName, brandName, asin)")
+        # cursor.execute("insert into products (product_name, brand_name, asin) values ('nome do produto', 'marca', 'lorem ipsum')")
         connection.commit()
+    end = time.time()
 
     print("Terminooooou")
+    print("Tempo gasto:",end - start)
 
 
 except (Exception, psycopg2.DatabaseError) as error:
