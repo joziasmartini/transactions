@@ -32,8 +32,11 @@ class Banco:
         try:
             self.df = pd.read_csv('data.csv')
             for x in range(10002): # (10002):
-                print(self.df['Product Name'] [x])
-                cursor.execute("insert into Products values
+                #print(self.df['Product Name'] [x])
+                ab = x + 10
+                query = "insert into product values( " + str(ab) + ", " + self.df['Product Name'] [x] + ")"
+                print(query)
+                #cursor.execute(
         
         except (Exception, psycopg2.DatabaseError) as error:
             print("Deu caca\n")
