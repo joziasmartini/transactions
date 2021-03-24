@@ -5,7 +5,7 @@ try:
     connection = psycopg2.connect(user="postgres",
                                   password="root",
                                   host="127.0.0.1",
-                                  database="postgres")
+                                  database="transactions")
     connection.autocommit = False
     cursor = connection.cursor()
 

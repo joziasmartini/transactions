@@ -1,7 +1,3 @@
-import pandas as pd
-
-df = pd.read_csv('data.csv')
-
-print(df['Product name'] [2])
-
-print("\n\n\n")
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path)
