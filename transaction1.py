@@ -1,6 +1,8 @@
 import psycopg2
 import pandas as pd
 import asyncio
+import time
+import timeit
 
 class Banco:
     def connect(self):
@@ -14,8 +16,14 @@ class Banco:
             print(error)
 
     async def runTransaction(self):
+        inicio = timeit.default_timer()
         await asyncio.gather(self.executeExplicit())
+        fim = timeit.default_timer()
+        print ('duracao explicita = : %f' % (fim - inicio))
+        inicio = timeit.default_timer()
         await asyncio.gather(self.executeImplicit())
+        fim = timeit.default_timer()
+        print ('duracao implicita = : %f' % (fim - inicio))
 
     async def executeExplicit(self):
         print('hello')
