@@ -31,12 +31,9 @@ class Banco:
             self.cursor.execute(query)
 
             self.df = pd.read_csv('data.csv')
-            for x in range(10002): # (10002):
-                #print(self.df['Product Name'] [x])
-                ab = x + 10
-                query = "insert into product values( " + str(ab) + ", " + self.df['Product Name'] [x] + ")"
-                # print(query)
-                self.cursor.execute(query)
+            for x in range(10002):
+                ab = (x + 20) * 25 * 998
+                self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
 
         except(Exception, psycopg2.DatabaseError) as error:
             print("Deu caca\n")
@@ -51,12 +48,9 @@ class Banco:
     async def executeImplicit(self):
         try:
             self.df = pd.read_csv('data.csv')
-            for x in range(10002): # (10002):
-                #print(self.df['Product Name'] [x])
-                ab = x + 10
-                query = "insert into product values( " + str(ab) + ", " + self.df['Product Name'] [x] + ")"
-                print(query)
-                #cursor.execute(query)
+            for x in range(10002):
+                ab = x * 21
+                self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
         
         except (Exception, psycopg2.DatabaseError) as error:
             print("Deu caca\n")
