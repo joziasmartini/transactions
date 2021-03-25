@@ -20,10 +20,10 @@ class Banco:
         await asyncio.gather(self.executeExplicit())
         fim = timeit.default_timer()
         print ('duracao explicita = : %f' % (fim - inicio))
-        #inicio = timeit.default_timer()
-        #await asyncio.gather(self.executeImplicit())
-        #fim = timeit.default_timer()
-        #print ('duracao implicita = : %f' % (fim - inicio))
+        inicio = timeit.default_timer()
+        await asyncio.gather(self.executeImplicit())
+        fim = timeit.default_timer()
+        print ('duracao implicita = : %f' % (fim - inicio))
 
     async def executeExplicit(self):
         try:
@@ -32,7 +32,7 @@ class Banco:
 
             self.df = pd.read_csv('data.csv')
             for x in range(10002):
-                ab = (x + 20) * 25 * 998
+                ab = (x + 20) * 25 * 3 - 1
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
 
         except(Exception, psycopg2.DatabaseError) as error:
@@ -48,8 +48,10 @@ class Banco:
     async def executeImplicit(self):
         self.df = pd.read_csv('data.csv')
         for x in range(10002):
-            ab = x * 21
+            ab = x * 21 * 29 - 2
             try:
+                query = "BEGIN"
+                self.cursor.execute(query)
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
         
             except (Exception, psycopg2.DatabaseError) as error:
