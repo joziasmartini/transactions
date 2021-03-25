@@ -46,22 +46,17 @@ class Banco:
             return 0  
 
     async def executeImplicit(self):
-        try:
-            self.df = pd.read_csv('data.csv')
-            for x in range(10002):
-                ab = x * 21
+        self.df = pd.read_csv('data.csv')
+        for x in range(10002):
+            ab = x * 21
+            try:
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
         
-        except (Exception, psycopg2.DatabaseError) as error:
-            print("Deu caca\n")
-            print(error)
-            self.connection.rollback()
+            except (Exception, psycopg2.DatabaseError) as error:
+                print("Deu caca - Linha "+ str(x) +" não pode ser inserida\n")
+                print(error)
+                self.connection.rollback()
 
 banco = Banco()
 banco.connect()
-# Banco.connect(self)
 asyncio.run(banco.runTransaction())
-# Banco.executeExplicit()
-# Banco.executeImplicit()
-# Banco.executeExplicitWithRollback()
-# Banco.executeImplicitWithRollback()
