@@ -1,56 +1,73 @@
 import psycopg2
 import pandas as pd
+import asyncio
 import time
+import timeit
 
-try:
-    connection = psycopg2.connect(user="postgres",
-                                  password="root",
-                                  host="127.0.0.1",
-                                  database="transactions")
-    connection.autocommit = False
-    cursor = connection.cursor()
+class Banco:
+    def connect(self):
+        try:
+            self.connection = psycopg2.connect(user="postgres", password="root", host="127.0.0.1", database="transactions")
+            self.connection.autocommit = False
+            self.cursor = self.connection.cursor()
+            
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Deu caca\n")
+            print(error)
 
-    query = "drop table if exists Products"
-    cursor.execute(query)
-    connection.commit()
+    async def runTransaction(self):
+        inicio = timeit.default_timer()
+        await asyncio.gather(self.executeExplicit())
+        fim = timeit.default_timer()
+        print ('duracao explicita = : %f' % (fim - inicio))
+        #inicio = timeit.default_timer()
+        #await asyncio.gather(self.executeImplicit())
+        #fim = timeit.default_timer()
+        #print ('duracao implicita = : %f' % (fim - inicio))
 
-    query = """create table if not exists Products(
-        product_name varchar(100),
-        brand_name varchar(100),
-        asin varchar(100)
-    )"""
-    cursor.execute(query)
-    connection.commit()
+    async def executeExplicit(self):
+        try:
+            query = "BEGIN"
+            self.cursor.execute(query)
 
-    print("Chegou aq")
+            self.df = pd.read_csv('data.csv')
+            for x in range(10002): # (10002):
+                #print(self.df['Product Name'] [x])
+                ab = x + 10
+                query = "insert into product values( " + str(ab) + ", " + self.df['Product Name'] [x] + ")"
+                # print(query)
+                self.cursor.execute(query)
 
-    #Começa inserção banco
+        except(Exception, psycopg2.DatabaseError) as error:
+            print("Deu caca\n")
+            print(error)
+            self.connection.rollback()
+            return 1
 
-    df = pd.read_csv('data.csv')
-    
-    start = time.time()
-    for x in range(100): # (10002):
-        productName = df['Product Name']
-        brandName = df['Brand Name']
-        asin = df['Asin']
+        finally:
+            self.connection.commit()
+            return 0  
 
-        cursor.execute("insert into Products values (productName, brandName, asin)")
-        # cursor.execute("insert into products (product_name, brand_name, asin) values ('nome do produto', 'marca', 'lorem ipsum')")
-        connection.commit()
-    end = time.time()
+    async def executeImplicit(self):
+        try:
+            self.df = pd.read_csv('data.csv')
+            for x in range(10002): # (10002):
+                #print(self.df['Product Name'] [x])
+                ab = x + 10
+                query = "insert into product values( " + str(ab) + ", " + self.df['Product Name'] [x] + ")"
+                print(query)
+                #cursor.execute(query)
+        
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Deu caca\n")
+            print(error)
+            self.connection.rollback()
 
-    print("Terminooooou")
-    print("Tempo gasto:",end - start)
-
-
-except (Exception, psycopg2.DatabaseError) as error:
-    print("Deu caca\n")
-    print(error)
-    connection.rollback()
-
-finally:
-    # Fecha a conexão com o banco de dados
-    if connection:
-        cursor.close()
-        connection.close()
-        print("PostgreSQL connection is closed")
+banco = Banco()
+banco.connect()
+# Banco.connect(self)
+asyncio.run(banco.runTransaction())
+# Banco.executeExplicit()
+# Banco.executeImplicit()
+# Banco.executeExplicitWithRollback()
+# Banco.executeImplicitWithRollback()
