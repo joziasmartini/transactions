@@ -52,14 +52,11 @@ class Banco:
         for x in range(10002):
             ab = (x + 20) * 2 + 5
             try:
-                query = "BEGIN"
-                self.cursor.execute(query)
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
         
             except (Exception, psycopg2.DatabaseError) as error:
                 print("Deu caca - Linha "+ str(x) +" não pode ser inserida\n")
                 print(error)
-                self.connection.rollback()
 
 banco = Banco()
 banco.connect()
