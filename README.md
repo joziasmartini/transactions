@@ -20,6 +20,3 @@ Is also necessary a dataset import through pandas.
 - Asyncio
 - Time
 - Timeit
-
-### Video
-The presentation video is published [here](http://uffs.jmartini.me/video-bd.mp4).
