@@ -1,5 +1,5 @@
 # python-transaction
-A transaction code in python and postgresql.
+A transaction code in Python and PostgreSQL.
 
 ### Starting
 To build the project, clone the repository and run:
