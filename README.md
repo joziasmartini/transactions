@@ -1,5 +1,5 @@
-# Transaction
-A transaction code in Python and PostgreSQL.
+# Transactions
+Transactions using Python and PostgreSQL.
 
 ### Introduction
 This project aims to analyze how transactions work within a database, as well as analyze the speed of data insertion.
