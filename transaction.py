@@ -3,15 +3,14 @@ import pandas as pd
 import asyncio
 import timeit
 
-class Banco:
+class Database:
     def connect(self):
         try:
             self.connection = psycopg2.connect(user="postgres", password="root", host="127.0.0.1", database="transactions")
             self.connection.autocommit = False
             self.cursor = self.connection.cursor()
-            
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Deu caca\n")
+            print("We got an error.\n")
             print(error)
 
     async def runTransaction(self):
@@ -22,7 +21,7 @@ class Banco:
         inicio = timeit.default_timer()
         await asyncio.gather(self.executeImplicit())
         fim = timeit.default_timer()
-        print ('duracao implicita = : %f' % (fim - inicio))
+        print ('Time duration: %f' % (fim - inicio))
         self.connection.close()
         self.cursor.close()
 
@@ -37,7 +36,7 @@ class Banco:
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
 
         except(Exception, psycopg2.DatabaseError) as error:
-            print("Deu caca\n")
+            print("We got an error.\n")
             print(error)
             self.connection.rollback()
             return 1
@@ -54,9 +53,9 @@ class Banco:
                 self.cursor.execute("""INSERT INTO product VALUES (%s, %s);""",(ab, self.df['Product Name'] [x]))
         
             except (Exception, psycopg2.DatabaseError) as error:
-                print("Deu caca - Linha "+ str(x) +" não pode ser inserida\n")
+                print("Error: Line "+ str(x) +" can not be inserted.\n")
                 print(error)
 
-banco = Banco()
-banco.connect()
-asyncio.run(banco.runTransaction())
+databaseInstance = Database()
+databaseInstance.connect()
+asyncio.run(databaseInstance.runTransaction())
