@@ -12,3 +12,11 @@ Thus, we were able to monitor the time that hundreds of thousands of insertions 
 - Clone the repository `git clone https://github.com/joziasmartini/transaction.git`
 - Start the PostgreSQL database `sudo service postgresql start`
 - Run the transaction algorithm `python3 transaction.py`
+
+### Technologies
+- [Python](https://www.python.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Psycopg2](https://pypi.org/project/psycopg2/)
+- [Pandas](https://pandas.pydata.org/)
+- [Asyncio](https://docs.python.org/3/library/asyncio.html)
+- [Timeit](https://docs.python.org/3/library/timeit.html)
