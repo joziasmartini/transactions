@@ -1,7 +1,6 @@
 import psycopg2
 import pandas as pd
 import asyncio
-import time
 import timeit
 
 class Banco:
